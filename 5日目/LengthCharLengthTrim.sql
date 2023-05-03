@@ -1,4 +1,4 @@
-USE day_4_9_db;
+	USE day_4_9_db;
 
 -- LENGTH, CHAR_LENGTH
 SELECT LENGTH("ABC");
