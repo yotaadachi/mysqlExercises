@@ -72,4 +72,25 @@ CASE
  WHEN birth_day < "1989-01-07" THEN "昭和"
  WHEN birth_day < "2019-05-01" THEN "平成"
  WHEN birth_day >= "2019-05-01" THEN "令和"
+ ELSE "不明"
+ END AS "元号"
+FROM users;
+
+UPDATE users
+SET birth_era = CASE
+ WHEN birth_day < "1989-01-07" THEN "昭和"
+ WHEN birth_day < "2019-05-01" THEN "平成"
+ WHEN birth_day >= "2019-05-01" THEN "令和"
+ ELSE "不明"
+ END
+ 
+ -- NULLを使う場合
+SELECT *,
+CASE
+ WHEN name IS NULL THEN "不明"
+ WHEN name IS NOT NULL THEN "NULL以外"
+ ELSE ""
+ END AS "NULL CHECK"
+FROM customers
+ 
  
