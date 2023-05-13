@@ -46,3 +46,29 @@ ROLLBACK;
 START TRANSACTION;
 SELECT * FROM customers WHERE id = 1 FOR UPDATE;
 ROLLBACK;
+
+-- LOCK TABLE READ
+LOCK TABLE customers READ;
+SELECT * FROM customers;
+UPDATE customers SET age = 42 WHERE id = 1;
+
+UNLOCK TABLES;
+
+-- LOCK TABLE WRITE
+LOCK TABLE customers WRITE;
+SELECT * FROM customers;
+
+UNLOCK TABLES;
+
+-- DEAD LOCK
+START TRANSACTION;
+-- customers → users
+UPDATE customers SET age = 42 WHERE id = 1;
+UPDATE users SET age = 12 WHERE id = 1;
+
+
+
+
+
+
+
