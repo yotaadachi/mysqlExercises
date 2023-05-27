@@ -28,3 +28,39 @@ SELECT MAX(age) FROM employees;
 
 SELECT * FROM employees
 WHERE age < (SELECT AVG(age) FROM employees);
+
+-- 副問い合わせ：FROMで用いる
+SELECT
+MAX(avg_age) AS "部署ごとの平均年齢の最大",
+MIN(avg_age) AS "部署ごとの平均年齢の最小"
+FROM
+(SELECT department_id, AVG(age) AS avg_age FROM employees GROUP BY department_id) AS tmp_emp;
+
+-- 年代の集計
+SELECT
+ MAX(age_count), MIN(age_count)
+FROM
+(SELECT FLOOR(age/10)*10, COUNT(*) AS age_count FROM employees GROUP BY FLOOR(age/10)) AS age_summary;
+
+-- 副問い合わせ：SELECTの中に書く
+SELECT * FROM customers;
+SELECT * FROM orders;
+
+SELECT
+ cs.id,
+ cs.first_name,
+ cs.last_name,
+(
+  SELECT MAX(order_date) FROM orders AS order_max WHERE cs.id = order_max.customer_id
+) AS "最新の注文",
+(
+  SELECT MIN(order_date) FROM orders AS order_max WHERE cs.id = order_max.customer_id
+) AS "最古の注文",
+(
+  SELECT SUM(order_amount * order_price) FROM orders AS order_max WHERE cs.id = order_max.customer_id
+) AS "全支払い金額"
+FROM 
+ customers AS cs
+WHERE
+ cs.id < 10;
+ 
