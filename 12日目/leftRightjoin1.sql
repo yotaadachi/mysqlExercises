@@ -76,4 +76,35 @@ INNER JOIN
    GROUP BY customer_id) AS order_summary
 ON ct.id = order_summary.customer_id;
 
+-- SELF JOIN(自己結合)
+SELECT
+ CONCAT(emp1.last_name, emp1.first_name) AS "部下の名前",
+ emp1.age AS "部下の年齢",
+ CONCAT(emp2.last_name, emp2.first_name) AS "上司の名前",
+ emp2.age AS "上司の年齢"
+FROM employees AS emp1
+LEFT OUTER JOIN employees AS emp2
+ON emp1.manager_id = emp2.id;
+
+-- CROSS JOIN
+SELECT * FROM employees AS emp1 CROSS JOIN employees AS emp2
+WHERE emp1.id = 1;
+
+-- 計算結果とCASEで紐付け
+SELECT
+*,
+CASE 
+ WHEN cs.age > summary_customers.avg_age THEN "○"
+ ELSE "×"
+END AS  "平均年齢よりも年齢が高いか"
+FROM customers AS cs
+CROSS JOIN(
+SELECT AVG(age) AS avg_age FROM customers
+) AS summary_customers;
+
+SELECT * FROM employees AS emp
+CROSS JOIN
+(SELECT AVG(payment) AS avg_payment FROM salaries) AS summary;
+
+
 
