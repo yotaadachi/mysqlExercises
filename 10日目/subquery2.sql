@@ -1,23 +1,31 @@
-USE day_10_14_db;
+-- CREATE SELECT INSERT
 
--- 副問い合わせ：CASEと使う
-SELECT 
- emp.*,
- CASE
- 	WHEN emp.department_id = (SELECT id FROM departments WHERE name = "経営企画部")
- 	THEN "経営層"
- 	ELSE "その他"
- END AS "役割"
- FROM
- employees AS emp;
+SHOW TABLES;
 
-SELECT
- emp.*,
- CASE
- 	WHEN emp.id IN(
- 	SELECT DISTINCT employee_id FROM salaries WHERE payment > (SELECT AVG(payment) FROM salaries)
- 	) THEN "○"
- 	ELSE "×"
- END AS "給料が平均より高いか"
-FROM
-employees emp;
+CREATE TABLE tmp_students
+SELECT * FROM students;
+
+SELECT * FROM tmp_students;
+
+DESCRIBE tmp_students;
+
+DROP TABLE tmp_students;
+
+CREATE TABLE tmp_students
+SELECT * FROM students WHERE id < 10;
+
+SELECT * FROM tmp_students;
+
+DESCRIBE users;
+
+INSERT INTO tmp_students
+SELECT id + 9 AS id, first_name, last_name, 2 AS grade FROM users;
+
+CREATE TABLE names
+SELECT first_name, last_name FROM students
+UNION
+SELECT first_name, last_name FROM employees
+UNION
+SELECT first_name, last_name FROM customers;
+
+SELECT * FROM names;
