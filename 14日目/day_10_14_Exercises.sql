@@ -84,3 +84,57 @@ ON orders.item_id = items.id
 INNER JOIN (SELECT * FROM stores WHERE name = "山田商店") AS stores
 ON items.store_id = stores.id
 GROUP BY CONCAT(customers.last_name, customers.first_name);
+
+-- 問題7
+DESCRIBE salaries;
+DESCRIBE employees;
+
+SELECT *
+FROM salaries
+WHERE employee_id
+IN (
+ SELECT employee_id
+ FROM salaries sal
+ WHERE payment > 9000000
+);
+
+SELECT *
+FROM salaries sal
+INNER JOIN employees emp
+ON sal.employee_id = emp.id
+WHERE sal.payment > 9000000;
+
+SELECT *
+FROM employees emp
+WHERE EXISTS(
+ SELECT 1
+ FROM salaries sal
+ WHERE emp.id = sal.employee_id
+ AND sal.payment > 9000000
+);
+
+-- 問題8
+SELECT *
+FROM employees
+WHERE id
+NOT IN (
+ SELECT employee_id
+ FROM salaries
+);
+
+SELECT *
+FROM employees emp
+LEFT OUTER JOIN salaries sal
+ON emp.id = sal.employee_id
+WHERE sal.employee_id IS NULL;
+
+SELECT *
+FROM employees emp
+WHERE NOT EXISTS(
+ SELECT 1
+ FROM salaries sal
+ WHERE sal.employee_id = emp.id
+);
+
+
+
