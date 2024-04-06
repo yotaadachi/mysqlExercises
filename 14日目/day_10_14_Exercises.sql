@@ -136,5 +136,34 @@ WHERE NOT EXISTS(
  WHERE sal.employee_id = emp.id
 );
 
+WITH customers_age AS(
+ SELECT MAX(age) AS max_age, MIN(age) AS min_age, AVG(age) AS avg_age
+ FROM customers
+)
+SELECT
+ *,
+ CASE
+ 	WHEN emp.age < ca.min_age THEN "最小未満"
+ END
+ 
+FROM employees AS emp
+CROSS JOIN customers_age AS ca;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
