@@ -144,11 +144,27 @@ SELECT
  *,
  CASE
  	WHEN emp.age < ca.min_age THEN "最小未満"
- END
- 
+ 	WHEN emp.age < ca.avg_age THEN "平均未満"
+ 	WHEN emp.age < ca.max_age THEN "最大未満"
+ END AS "customersとの比較"
 FROM employees AS emp
 CROSS JOIN customers_age AS ca;
 
+WITH tmp_customers AS(
+ SELECT *
+ FROM customers
+ WHERE age > 50
+),tmp_customers_orders AS (
+ SELECT
+  tc.id,
+  od.order_date,
+  SUM(od.order_amount * od.order_price) AS payment
+ FROM tmp_customers AS tc
+ INNER JOIN orders AS od
+ ON tc.id = od.customer_id
+ GROUP BY tc.id, od.order_date
+)
+SELECT * FROM tmp_customers_orders;
 
 
 
